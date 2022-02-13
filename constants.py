@@ -1,4 +1,9 @@
 class ENDPOINT:
+    class FILE_BASED:
+        SENTIMENT_FILE = "/sentiment_file"
+        SENTIMENT_FILE_LONG = "/sentiment_file_long"
+        SUPPORTED_EXTENSIONS = ["txt"]
+
     class TEXT:
         SENTIMENT = "/sentiment_text"
         SENTIMENT_LONG = "/sentiment_text_long"
@@ -24,6 +29,7 @@ class EXAMPLES:
 
 class ERROR_MESSAGES:
     CONTACT_SUPPORT = "An unexpected error occurred. Please contact support."
+    EXTENSION = "File has extension .{}. Only the following extensions are allowed: {}"
     N_WORDS = "Maximum number of words exceeded for this endpoint (max = {} words; your text = {} words)"
 
 
