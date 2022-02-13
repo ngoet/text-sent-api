@@ -1,0 +1,37 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.0.1
+  hooks:
+    - id: check-yaml
+    - id: check-toml
+    - id: mixed-line-ending
+      args: [ --fix=lf ]
+    - id: trailing-whitespace
+    - id: check-builtin-literals
+    - id: check-merge-conflict
+    - id: end-of-file-fixer
+      exclude: .*\.(json|lock)$
+    - id: check-docstring-first
+
+- repo: local
+  hooks:
+    - id: commitizen
+      name: commitizen
+      stages: [ commit-msg ]
+      language: system
+      entry: poetry run cz check --commit-msg-file
+      types: [ python ]
+
+    - id: black
+      name: black
+      stages: [ commit ]
+      language: system
+      entry: poetry run black
+      types: [ python ]
+
+    - id: isort
+      name: isort
+      stages: [ commit ]
+      language: system
+      entry: poetry run isort
+      types: [ python ]
