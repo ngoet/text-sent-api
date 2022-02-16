@@ -1,0 +1,61 @@
+service: textsentimentapi
+
+custom:
+  apiKeys:
+    - name: textsentimentapi-api-key
+  pythonRequirements:
+    dockerizePip: true
+    layer:
+      compatibleRuntimes: [python3.9]
+      description: Sentiment Analysis Service
+      name: textsentimentapi-layer
+      usagePlan:
+        name: "basic"
+        description: "Global plan to keep overall usage in check"
+        quota:
+          limit: 3000000
+          period: MONTH
+        throttle:
+          burstLimit: 5000
+          rateLimit: 10000
+functions:
+  app:
+    name: textsentimentapi-lambda
+    environment: {PROXY_SECRET: <INSERT>}
+    events:
+      - http: {method: any, path: '/{proxy+}', private: true}
+    handler: main.handler
+    maximumRetryAttempts: 1
+    reservedConcurrency: 100
+    memorySize: 128
+    timeout: 10
+    layers:
+      - {Ref: PythonRequirementsLambdaLayer}
+    package:
+      patterns:
+        - 'main.py'
+        - 'constants.py'
+        - 'utils.py'
+        - '!package.json'
+        - '!package-lock.json'
+        - '!.serverless/**'
+        - '!node_modules/**'
+        - '!.pytest_cache/**'
+        - '!tmp_files/**,'
+        - '!tests/**'
+        - '!.gitignore'
+        - '!.pre-commit-config.yaml'
+        - '!pyproject.toml'
+        - '!README.md'
+package:
+  individually: true
+  patterns:
+    - '!tmp/**'
+    - '!.git/**'
+plugins:
+  - serverless-python-requirements
+  - serverless-add-api-key
+provider:
+  name: aws
+  region: eu-west-1
+  runtime: python3.9
