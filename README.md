@@ -46,3 +46,71 @@ cz bump --changelog --check-consistency
 git push
 git push --tags
 ```
+
+
+## Deploying with Serverless
+Further reading:
+* [https://adem.sh/blog/tutorial-fastapi-aws-lambda-serverless](https://adem.sh/blog/tutorial-fastapi-aws-lambda-serverless)
+* [https://www.serverless.com](https://www.serverless.com)
+
+The infrastructure is specified in [serverless.yaml](serverless.yaml).
+
+Install serverless with:
+
+```
+npm install -g serverless
+```
+
+Install the serverless plugins:
+```
+serverless plugin install -n serverless-python-requirements
+serverless plugin install -n serverless-add-api-key
+```
+
+Config credentials:
+```
+serverless config credentials --provider aws --key <YOUR-KEY> --secret <YOUR-SECRET-KEY>
+```
+
+Deploy with (make sure Docker is running prior to this step!
+Also note that this requires you to have configured the right IAM permissions for the AWS user that you added in the
+previous step):
+
+```
+sls deploy --aws-profile <YOUR-AWS-PROFILE-NAME> --stage <ENV>
+```
+
+Or [deploy a single function](https://www.serverless.com/framework/docs/providers/aws/cli-reference/deploy-function):
+```
+serverless deploy --aws-profile <YOUR-AWS-PROFILE-NAME> function -f <FUNCTION-NAME>
+```
+
+Afterwards, make sure you add permissions to invoke the API on the Lambda Role.
+Also make sure that you [whitelist IPs](https://lobster1234.github.io/2018/04/14/amazon-api-gateway-ip-whitelisting/), e.g.:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": "<ENDPOINT-ARN>",
+            "Condition": {
+                "IpAddress": {
+                    "aws:SourceIp": [
+                        "<MY_IPS>"
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
+
+Delete with:
+
+```
+sls remove --aws-profile <YOUR-AWS-PROFILE-NAME> --stage <ENV>
+```
