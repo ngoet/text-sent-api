@@ -1,6 +1,14 @@
 # TextSentiment API
 An API for running sentiment analysis on texts, based on FastAPI and TextBlob.
 
+## Testing the endpoints
+Endpoints can be tested locally ([test_local](tests/test_local.py)), or directly with your deployed API ([test_integration](tests/test_integration.py)).
+
+### Start Local debugging
+To run the local endpoint tests, you first need to start local debugging using the following command:
+```bash
+uvicorn main:app --reload
+```
 
 ### Coding standards
 This project uses `pre-commit` hooks to reformat non-compliant code and enforce code quality.
