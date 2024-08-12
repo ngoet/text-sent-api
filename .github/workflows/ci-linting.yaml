@@ -1,0 +1,24 @@
+name: "ci-linting"
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.7"
+
+      - name: Linting
+        run: |
+          pip install poetry
+          pip install pre-commit
+          pre-commit install
+          pre-commit run --all-files
