@@ -21,4 +21,4 @@ jobs:
           poetry install --with dev
       - name: Run unit tests
         run: |
-          pytest tests/test_sent_analysis.py -v
+          poetry run pytest tests/test_sent_analysis.py -v
