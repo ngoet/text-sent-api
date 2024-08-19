@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "textsentimentapi"
-version = "0.1.0"
+version = "1.0.0"
 description = "An API for detecting sentiment"
 authors = ["Niels D. Goet"]
 
@@ -56,7 +56,7 @@ exclude = '''
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.1.0"
+version = "1.0.0"
 tag_format = "v$version"
 version_files = [
     "pyproject.toml:version"
